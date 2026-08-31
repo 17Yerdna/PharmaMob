@@ -315,49 +315,64 @@ Proyecto académico para la asignatura de Desarrollo de Aplicaciones Móviles.
 
 ---
 
-## 📁 Estructura de Archivos
+## 📁 Estructura del proyecto
 
-```
-shared/src/commonMain/kotlin/pe/edu/upeu/pharmamobil/
-├── domain/
-│   ├── model/
-│   │   ├── Cliente.kt
-│   │   ├── Producto.kt
-│   │   ├── Pedido.kt
-│   │   ├── DetallePedido.kt
-│   │   └── EstadoPedido.kt
-│   ├── usecase/
-│   │   ├── ProductoQueries.kt
-│   │   └── ObservarProductosUseCase.kt
-│   └── result/
-│       └── ResultadoProductos.kt
-├── data/
-│   └── repository/
-│       └── ProductoRepository.kt
-└── demo/
-    └── DemoFunctions.kt
+```text
+PharmaMobil/
+├── androidApp/
+│   └── src/main/...               # aplicación Android
+├── shared/
+│   └── src/
+│       ├── commonMain/kotlin/pe/edu/upeu/pharmamobil/
+│       │   ├── domain/
+│       │   ├── data/
+│       │   ├── demo/
+│       │   └── ...
+│       ├── androidMain/
+│       └── iosMain/
+├── iosApp/
+├── gradle/
+├── build.gradle.kts
+├── settings.gradle.kts
+├── gradle.properties
+├── gradlew
+├── gradlew.bat
+├── README.md
+└── .gitignore
 ```
 
 ---
 
-## 🚀 Ejecuci ón
+## 🚀 Ejecución rápida
 
 ### Requisitos
-- Android Studio Koala o superior
+- Android Studio o IntelliJ IDEA con soporte Android
 - JDK 17
 - Android SDK
-- Gradle 8.0+
+- Gradle 8.x
 
 ### Comandos
 ```bash
-# Sincronizar proyecto
-./gradlew :shared:sync
-
-# Ejecutar tests
-./gradlew :shared:allTests
-
-# Build del proyecto
+# Compilar el proyecto
 ./gradlew build
+
+# Ejecutar la app Android desde Android Studio
+# o desde la configuración de ejecución del módulo androidApp
+```
+
+---
+
+## 👨‍💻 Autor
+
+**Andrey Mestanza**  
+Estudiante de Ingeniería de Sistemas - UPeU  
+[GitHub](https://github.com/17Yerdna)
+
+---
+
+## 📄 Licencia
+
+Proyecto académico para la asignatura de Desarrollo de Aplicaciones Móviles.
 ```
 
 ---
