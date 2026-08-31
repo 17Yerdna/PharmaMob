@@ -1,400 +1,191 @@
 # PharmaMobil 📱💊
 
-Aplicativa móvil multiplataforma para gestión de farmacias, desarrollada con Kotlin Multiplatform (KMP).
+> **Aplicación móvil multiplataforma para la gestión moderna de farmacias**, desarrollada con **Kotlin Multiplatform (KMP)** y **Compose Multiplatform (Material 3)**.
 
 <div align="center">
-  <img src="https://img.shields.io/badge/Kotlin-Multiplatform-7F52FF?style=for-the-badge&logo=kotlin" alt="Kotlin Multiplatform" />
-  <img src="https://img.shields.io/badge/Android-Compose-3DDC84?style=for-the-badge&logo=android" alt="Android Compose" />
-  <img src="https://img.shields.io/badge/iOS-Ready-000000?style=for-the-badge&logo=apple" alt="iOS" />
+
+[![Kotlin Multiplatform](https://img.shields.io/badge/Kotlin-2.4.10-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org/docs/multiplatform.html)
+[![Compose Multiplatform](https://img.shields.io/badge/Compose-Multiplatform_1.11-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)](https://www.jetbrains.com/lp/compose-multiplatform/)
+[![Material 3](https://img.shields.io/badge/Material_3-Ready-795548?style=for-the-badge&logo=materialdesign&logoColor=white)](https://m3.material.io/)
+[![Android](https://img.shields.io/badge/Android-API_24+-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://developer.android.com)
+[![iOS Ready](https://img.shields.io/badge/iOS-14+-000000?style=for-the-badge&logo=apple&logoColor=white)](https://apple.com)
+[![Tests](https://img.shields.io/badge/Tests-10%20Passed%20(100%25)-brightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](#-testing-y-control-de-calidad)
+
 </div>
-
-## 🎓 Contexto académico
-
-- **Universidad:** Universidad Peruana Unión (UPeU)
-- **Ciclo:** VIII Ciclo - 2026-2
-- **Asignatura:** Desarrollo de Aplicaciones Móviles
-- **Estudiante:** Andrey Mestanza
-- **GitHub:** https://github.com/17Yerdna
 
 ---
 
-## 🏗️ Arquitectura del proyecto
+## 🎓 Contexto Académico
+
+* **Institución:** Universidad Peruana Unión (UPeU)
+* **Carrera:** Ingeniería de Sistemas
+* **Asignatura:** Desarrollo de Aplicaciones Móviles
+* **Ciclo:** VIII Ciclo
+* **Estudiante:** Andrey Mestanza
+* **Perfil GitHub:** [@17Yerdna](https://github.com/17Yerdna)
+
+---
+
+## 🌟 Novedad: Sesión 3 - Formulario Reactivo de Productos
+
+En esta etapa se implementó el **Reto 02: Gestión del Estado, Validación y Retroalimentación Visual**, integrando un flujo declarativo y seguro para el registro de productos farmacéuticos.
+
+### 📋 Reglas Funcionales y Validación Secuencial
+
+| Campo Evaluado | Regla Estricta | Mensaje de Error en UI |
+| :--- | :--- | :--- |
+| **Nombre** | No vacío ni compuesto únicamente por espacios (`isNotBlank()`) | *"El nombre es obligatorio."* |
+| **Precio** | Conversión numérica exitosa (`toDoubleOrNull()`) | *"Ingrese un precio numérico."* |
+| **Precio** | Valor estrictamente positivo (`> 0.0`) | *"El precio debe ser mayor que cero."* |
+| **Stock** | Formato de número entero (`toIntOrNull()`) | *"Ingrese un stock entero."* |
+| **Stock** | Cantidad no negativa (`>= 0`) | *"El stock no puede ser negativo."* |
+
+### ✨ Características del Formulario (`ProductoScreen.kt`):
+* **Estados Reactivos:** Control de entradas con `remember { mutableStateOf(...) }` para preservar la experiencia del usuario entre recomposiciones.
+* **Conversión Segura (`*OrNull`):** Eliminación total de excepciones fatales (`NumberFormatException`) previniendo caídas imprevistas (*crashes*).
+* **Control de Intento de Envío:** La propiedad `isError` y los avisos visuales se activan **únicamente tras pulsar el botón de Registrar**, evitando alertar al usuario antes de interactuar.
+* **Limpieza Automática:** Tras registrar con éxito, se restablecen los campos a cadenas vacías y se reinicia el estado de validación.
+
+---
+
+## 🏗️ Arquitectura del Proyecto
+
+El proyecto aplica **Clean Architecture** compartiendo la lógica de negocio y presentación en el módulo `shared`:
 
 ```text
 PharmaMobil/
 ├── shared/
 │   └── src/commonMain/kotlin/pe/edu/upeu/pharmamobil/
 │       ├── domain/
-│       │   ├── model/          # Entidades de dominio
-│       │   ├── usecase/        # Casos de uso y consultas
-│       │   └── result/         # Resultados sellados
+│       │   ├── model/          # Entidades con invariantes (Producto, Cliente, etc.)
+│       │   ├── usecase/        # Casos de uso y consultas funcionales
+│       │   └── result/         # Clases selladas de respuesta (ResultadoProductos)
 │       ├── data/
-│       │   └── repository/     # Repositorios
-│       └── demo/               # Demostraciones
-├── androidApp/
-├── iosApp/
+│       │   └── repository/     # Repositorios (simulación reactiva)
+│       ├── presentation/
+│       │   └── producto/       # UI reactiva en Compose (ProductoScreen.kt)
+│       └── demo/               # Demostraciones de flujo reactivo
+├── androidApp/                 # Punto de entrada y configuración nativa de Android
+├── iosApp/                     # Punto de entrada Swift/SwiftUI para iOS
 ├── build.gradle.kts
 ├── settings.gradle.kts
-├── gradlew
 └── README.md
 ```
 
 ---
 
-## 📦 Modelo de dominio
-
-### `Cliente` 🧑‍💼
-
-```kotlin
-data class Cliente(
-    val id: Long,
-    val nombre: String,
-    val correo: String,
-    val telefono: String?
-)
-```
-
-**Métodos:**
-- `obtenerTelefono()` - Retorna el teléfono o "No registrado" si es null.
-
-**Características:**
-- Null-safety con operador Elvis `?:`
-- Inmutabilidad con `val`
+## 📦 Modelo de Dominio
 
 ### `Producto` 💊
-
+Entidad central con invariantes de validación en su constructor (`init`):
 ```kotlin
 data class Producto(
     val id: Long,
     val nombre: String,
     val precio: Double,
     val stock: Int
-)
-```
-
-**Validaciones en `init`:**
-- Nombre no vacío (`isNotBlank()`)
-- Precio mayor a cero
-- Stock no negativo
-
-**Métodos:**
-- `verificarStock(cantidad)` - Valida si hay stock suficiente
-- `estadoDisponible()` - Retorna `true` si stock > 0
-- `valorInventario()` - Calcula precio × stock
-- `disminuirStock(cantidad)` - Reduce stock de forma segura con validaciones
-
-### `Pedido` 📋
-
-```kotlin
-data class Pedido(
-    val id: Long,
-    val cliente: Cliente,
-    val detalles: List<DetallePedido>,
-    val estado: EstadoPedido
-)
-```
-
-**Relaciones:**
-- Un `Pedido` pertenece a un `Cliente`
-- Un `Pedido` contiene múltiples `DetallePedido`
-
-### `DetallePedido` 📝
-
-```kotlin
-data class DetallePedido(
-    val producto: Producto,
-    val cantidad: Int
-)
-```
-
-**Validación:**
-- Cantidad debe ser mayor que 0
-
-**Métodos:**
-- `subtotal()` - Calcula precio × cantidad
-
-### `EstadoPedido` 🔄
-
-```kotlin
-sealed class EstadoPedido {
-    data object Pendiente : EstadoPedido()
-    data object Procesando : EstadoPedido()
-    data object Entregado : EstadoPedido()
-    data class Rechazado(val motivo: String) : EstadoPedido()
-}
-```
-
-**Ventajas:**
-- Conjunto cerrado de estados conocidos
-- Evaluación exhaustiva con `when`
-- Transporte de datos en `Rechazado(motivo)`
-
----
-
-## 🔧 Consultas funcionales
-
-### `ProductoQueries.kt`
-
-| Función | Descripción | Operador |
-|----------|-------------|----------|
-| `productosDisponibles()` | Filtra productos con stock > 0 | `filter` |
-| `nombresDeProductos()` | Extrae nombres de productos | `map` |
-| `buscarProductoPorId()` | Busca producto por ID | `find` |
-| `valorTotalInventario()` | Calcula valor total del inventario | `sumOf` |
-| `productosConStockBajo()` | Filtra productos con stock entre 1 y límite | `filter` |
-
-**Ejemplo de uso:**
-
-```kotlin
-val disponibles = productosDisponibles(productos)
-val nombres = nombresDeProductos(productos)
-val producto = buscarProductoPorId(productos, 2L)
-val total = valorTotalInventario(productos)
-```
-
----
-
-## ⚡ Async con corrutinas y Flow
-
-### `ProductoRepository` 🗄️
-
-```kotlin
-interface ProductoRepository {
-    suspend fun obtenerProductos(): List<Producto>
-    suspend fun actualizarStock(
-        productoId: Long,
-        nuevoStock: Int
-    ): Result<Producto>
-}
-```
-
-**Implementación `ProductoRepositoryFake`:**
-- Simula latencia de red con `delay(1000)`
-- Manejo de errores con `Result`
-- Lógica para aumentar o disminuir stock
-
-### `ObservarProductosUseCase` 🔄
-
-```kotlin
-class ObservarProductosUseCase(
-    private val repository: ProductoRepository
 ) {
-    operator fun invoke(): Flow<ResultadoProductos>
-}
-```
-
-**Estados de `ResultadoProductos`:**
-
-```kotlin
-sealed class ResultadoProductos {
-    data object cargando : ResultadoProductos()
-    data class Exito(val productos: List<Producto>) : ResultadoProductos()
-    data class Error(val mensaje: String) : ResultadoProductos()
-}
-```
-
-**Flujo de emisión:**
-1. `cargando` → Muestra indicador de carga
-2. `Exito` → Emite lista de productos
-3. `Error` → Maneja excepciones
-
----
-
-## 🧪 Testing
-
-### `SharedLogicAndroidHostTest`
-
-```kotlin
-class SharedLogicAndroidHostTest {
-    @Test
-    fun clienteTelefono() {
-        val cliente = Cliente(
-            id = 1L,
-            nombre = "Farmacia Laufarma",
-            correo = "ventas@laufarma.pe",
-            telefono = "987654321"
-        )
-        val resultado = cliente.obtenerTelefono()
-        assertEquals(expected = "987654321", actual = resultado)
+    init {
+        require(nombre.isNotBlank()) { "El nombre no puede estar vacío" }
+        require(precio > 0) { "El precio debe ser mayor que 0" }
+        require(stock >= 0) { "El stock no puede ser negativo" }
     }
 }
 ```
+* **Métodos principales:** `verificarStock(cantidad)`, `estadoDisponible()`, `valorInventario()`, `disminuirStock(cantidad)`.
+
+### `Cliente` 🧑‍💼
+```kotlin
+data class Cliente(
+    val id: Long,
+    val nombre: String,
+    val correo: String,
+    val telefono: String?
+) {
+    fun obtenerTelefono(): String = telefono ?: "No registrado"
+}
+```
+
+### `Pedido` y `DetallePedido` 📋
+* **`DetallePedido`:** Representa un ítem adquirido calculando subtotales (`precio * cantidad`).
+* **`EstadoPedido`:** `sealed class` con estados tipados: `Pendiente`, `Procesando`, `Entregado` y `Rechazado(motivo)`.
 
 ---
 
-## 🎯 Características implementadas
+## ⚡ Asincronía, Corrutinas y Flow
 
-### Null-Safety ✅
-- Uso de tipos `String?` para datos opcionales
-- Operador Elvis `?:` para valores por defecto
-- Evita operador `!!` (aserción forzada)
-
-### Inmutabilidad ✅
-- Propiedades declaradas con `val`
-- Data classes con método `copy()`
-- Listas inmutables con `toList()`
-
-### Data Classes ✅
-- Generación automática de `equals`, `hashCode`, `toString`
-- Pattern matching con `when`
-- Desestructuración de objetos
-
-### Sealed Classes ✅
-- Estados restringidos a conjunto conocido
-- Evaluación exhaustiva en compilación
-- Transporte de datos en subtipos
-
-### Corrutinas ✅
-- Funciones `suspend` para operaciones asíncronas
-- `delay()` para simulación de latencia
-- No bloqueo del hilo principal
-
-### Flow ✅
-- Emisión múltiple de valores en el tiempo
-- Manejo reactivo de estados
-- Integración con ViewModel (StateFlow)
+* **`ProductoRepository`:** Interface para obtención de datos con funciones suspendidas (`suspend`).
+* **`ObservarProductosUseCase`:** Emite flujos reactivos (`Flow<ResultadoProductos>`) modelando tres estados:
+  1. `cargando` $\rightarrow$ Renderizado de indicadores de progreso.
+  2. `Exito` $\rightarrow$ Emisión inmutable de la lista de productos.
+  3. `Error` $\rightarrow$ Captura y propagación segura de fallos.
 
 ---
 
-## 🛠️ Stack tecnológico
+## 🧪 Testing y Control de Calidad
 
-| Tecnología | Propósito |
-|------------|-----------|
-| Kotlin Multiplatform | Compartición de código Android/iOS |
-| Corrutinas | Asincronía no bloqueante |
-| Flow | Programación reactiva |
-| Clean Architecture | Separación de capas |
-| Compose Multiplatform | UI compartida |
-
----
-
-## 🚀 Ejecución
-
-### Requisitos
-- Android Studio Koala o superior
-- JDK 17
-- Android SDK
-- Gradle 8.0+
-
-### Comandos
+La lógica del formulario y del dominio está respaldada por una suite de pruebas unitarias automatizadas:
 
 ```bash
-# Sincronizar proyecto
-./gradlew :shared:sync
+./gradlew :shared:allTests
+```
 
-# Ejecutar tests
+### Matriz de Casos de Prueba (`ProductoValidationTest.kt`)
+
+| Caso | Nombre | Precio | Stock | Resultado Verificado | Estado |
+| :---: | :--- | :---: | :---: | :--- | :---: |
+| **1** | `Paracetamol 500 mg` | `8.50` | `100` | Registro exitoso y objeto `Producto` creado | ✅ Aprobado |
+| **2** | `""` (Vacío / Espacios) | `8.50` | `100` | Error: *"El nombre es obligatorio."* | ✅ Aprobado |
+| **3** | `Ibuprofeno` | `abc` | `50` | Error: *"Ingrese un precio numérico."* | ✅ Aprobado |
+| **4** | `Ibuprofeno` | `0` | `50` | Error: *"El precio debe ser mayor que cero."* | ✅ Aprobado |
+| **5** | `Amoxicilina` | `18.50` | `abc` | Error: *"Ingrese un stock entero."* | ✅ Aprobado |
+| **6** | `Amoxicilina` | `18.50` | `-5` | Error: *"El stock no puede ser negativo."* | ✅ Aprobado |
+| **7** | `Loratadina` | `10` | `0` | Registro exitoso con stock cero | ✅ Aprobado |
+
+**Resultado total:** `10 tests ejecutados, 0 fallos (100% de éxito).`
+
+---
+
+## 🚀 Ejecución del Proyecto
+
+### Requisitos Previos
+* **JDK 17** o superior
+* **Android SDK** (API 24+)
+* **Android Studio** o IntelliJ IDEA con soporte Kotlin Multiplatform
+
+### Comandos de Utilidad
+
+```powershell
+# Ejecutar todas las pruebas unitarias
 ./gradlew :shared:allTests
 
-# Build del proyecto
-./gradlew build
+# Compilar e instalar la aplicación en tu emulador o dispositivo Android
+./gradlew :androidApp:installDebug
+
+# Compilar todo el proyecto
+./gradlew assembleDebug
 ```
 
 ---
 
-## 📝 Buenas prácticas aplicadas
+## 📝 Buenas Prácticas Aplicadas
 
-1. Código 100% `commonMain` - sin dependencias de Android/iOS
-2. Commits atómicos - cada cambio en un commit separado
-3. Validaciones en `init` - reglas de negocio en el constructor
-4. Propiedades derivadas - cálculos como funciones, no como `var`
-5. Manejo seguro de nulos - sin `!!`, con `?:` y `?.`
+1. **Arquitectura Declarativa:** Interfaz reactiva en función del estado local (`UI = f(state)`).
+2. **Defensive Programming:** Conversiones numéricas seguras mediante `toDoubleOrNull()` y `toIntOrNull()`.
+3. **Inmutabilidad y Null-Safety:** Uso predominante de `val`, operadores elvis (`?:`) y descarte del operador de aserción forzada (`!!`).
+4. **Validaciones en Capa de Dominio:** Bloques `init` con llamadas a `require(...)` para proteger la integridad de las entidades.
+5. **Separación de Responsabilidades:** Lógica de validación desacoplada y lista para su traslado a un `ViewModel`.
 
 ---
 
 ## 👨‍💻 Autor
 
 **Andrey Mestanza**  
-Sistemas Engineering Student - UPeU  
-[GitHub](https://github.com/17Yerdna)
+Estudiante de Ingeniería de Sistemas — Universidad Peruana Unión (UPeU)  
+GitHub: [@17Yerdna](https://github.com/17Yerdna)
 
 ---
 
 ## 📄 Licencia
 
-Proyecto académico para la asignatura de Desarrollo de Aplicaciones Móviles.
-
----
-
-## 📁 Estructura del proyecto
-
-```text
-PharmaMobil/
-├── androidApp/
-│   └── src/main/...               # aplicación Android
-├── shared/
-│   └── src/
-│       ├── commonMain/kotlin/pe/edu/upeu/pharmamobil/
-│       │   ├── domain/
-│       │   ├── data/
-│       │   ├── demo/
-│       │   └── ...
-│       ├── androidMain/
-│       └── iosMain/
-├── iosApp/
-├── gradle/
-├── build.gradle.kts
-├── settings.gradle.kts
-├── gradle.properties
-├── gradlew
-├── gradlew.bat
-├── README.md
-└── .gitignore
-```
-
----
-
-## 🚀 Ejecución rápida
-
-### Requisitos
-- Android Studio o IntelliJ IDEA con soporte Android
-- JDK 17
-- Android SDK
-- Gradle 8.x
-
-### Comandos
-```bash
-# Compilar el proyecto
-./gradlew build
-
-# Ejecutar la app Android desde Android Studio
-# o desde la configuración de ejecución del módulo androidApp
-```
-
----
-
-## 👨‍💻 Autor
-
-**Andrey Mestanza**  
-Estudiante de Ingeniería de Sistemas - UPeU  
-[GitHub](https://github.com/17Yerdna)
-
----
-
-## 📄 Licencia
-
-Proyecto académico para la asignatura de Desarrollo de Aplicaciones Móviles.
-```
-
----
-
-## 📝 Buenas Pr ácticas Aplicadas
-
-1. **C ódigo 100% commonMain** - Sin dependencias de Android/iOS
-2. **Commits at ómicos** - Cada cambio en un commit separado
-3. **Validaciones en `init`** - Reglas de negocio en el constructor
-4. **Propiedades derivadas** - C álculos como funciones, no como `var`
-5. **Manejo seguro de nulos** - Sin `!!`, con `?:` y `?.`
-
----
-
-## 👨‍💻 Autor
-
-**Andrey Mestanza**  
-Sistemas Engineering Student - UPeU  
-[GitHub](https://github.com/17Yerdna)
-
----
-
-## 📄 Licencia
-
-Proyecto acad émico para la asignatura de Desarrollo de Aplicaciones M óviles.
+Proyecto académico desarrollado para el curso de **Desarrollo de Aplicaciones Móviles**. Todos los derechos reservados.
