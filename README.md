@@ -4,7 +4,7 @@ Aplicativa móvil multiplataforma para gestión de farmacias, desarrollada con *
 
 ## 🎓 Contexto Acad émico
 
-- **Universidad:** Universidad Peruana de Ciencias Aplicadas (UPeU)
+- **Universidad:** Universidad Peruana Unión (UPeU)
 - **Ciclo:** VIII Ciclo - 2026-2
 - **Asignatura:** Desarrollo de Aplicaciones Móviles
 - **Estudiante:** Fabian Rodriguez
