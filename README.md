@@ -1,17 +1,26 @@
 # PharmaMobil 📱💊
 
-Aplicativa móvil multiplataforma para gestión de farmacias, desarrollada con **Kotlin Multiplatform (KMP)**.
+Aplicativa móvil multiplataforma para gestión de farmacias, desarrollada con Kotlin Multiplatform (KMP).
 
-## 🎓 Contexto Acad émico
+<div align="center">
+  <img src="https://img.shields.io/badge/Kotlin-Multiplatform-7F52FF?style=for-the-badge&logo=kotlin" alt="Kotlin Multiplatform" />
+  <img src="https://img.shields.io/badge/Android-Compose-3DDC84?style=for-the-badge&logo=android" alt="Android Compose" />
+  <img src="https://img.shields.io/badge/iOS-Ready-000000?style=for-the-badge&logo=apple" alt="iOS" />
+</div>
+
+## 🎓 Contexto académico
 
 - **Universidad:** Universidad Peruana Unión (UPeU)
 - **Ciclo:** VIII Ciclo - 2026-2
 - **Asignatura:** Desarrollo de Aplicaciones Móviles
-- **Estudiante:** Fabian Rodriguez
+- **Estudiante:** Andrey Mestanza
+- **GitHub:** https://github.com/17Yerdna
 
-## 🏗️ Arquitectura del Proyecto
+---
 
-```
+## 🏗️ Arquitectura del proyecto
+
+```text
 PharmaMobil/
 ├── shared/
 │   └── src/commonMain/kotlin/pe/edu/upeu/pharmamobil/
@@ -23,10 +32,16 @@ PharmaMobil/
 │       │   └── repository/     # Repositorios
 │       └── demo/               # Demostraciones
 ├── androidApp/
-└── iosApp/
+├── iosApp/
+├── build.gradle.kts
+├── settings.gradle.kts
+├── gradlew
+└── README.md
 ```
 
-## 📦 Modelo de Dominio
+---
+
+## 📦 Modelo de dominio
 
 ### `Cliente` 🧑‍💼
 
@@ -39,14 +54,12 @@ data class Cliente(
 )
 ```
 
-**M étodos:**
-- `obtenerTelefono()` - Retorna el teléfono o "No registrado" si es null
+**Métodos:**
+- `obtenerTelefono()` - Retorna el teléfono o "No registrado" si es null.
 
-**Caracter ísticas:**
+**Características:**
 - Null-safety con operador Elvis `?:`
 - Inmutabilidad con `val`
-
----
 
 ### `Producto` 💊
 
@@ -64,13 +77,11 @@ data class Producto(
 - Precio mayor a cero
 - Stock no negativo
 
-**M étodos:**
+**Métodos:**
 - `verificarStock(cantidad)` - Valida si hay stock suficiente
 - `estadoDisponible()` - Retorna `true` si stock > 0
 - `valorInventario()` - Calcula precio × stock
 - `disminuirStock(cantidad)` - Reduce stock de forma segura con validaciones
-
----
 
 ### `Pedido` 📋
 
@@ -87,8 +98,6 @@ data class Pedido(
 - Un `Pedido` pertenece a un `Cliente`
 - Un `Pedido` contiene múltiples `DetallePedido`
 
----
-
 ### `DetallePedido` 📝
 
 ```kotlin
@@ -98,13 +107,11 @@ data class DetallePedido(
 )
 ```
 
-**Validaci ón:**
+**Validación:**
 - Cantidad debe ser mayor que 0
 
-**M étodos:**
+**Métodos:**
 - `subtotal()` - Calcula precio × cantidad
-
----
 
 ### `EstadoPedido` 🔄
 
@@ -119,16 +126,16 @@ sealed class EstadoPedido {
 
 **Ventajas:**
 - Conjunto cerrado de estados conocidos
-- Evaluaci ón exhaustiva con `when`
+- Evaluación exhaustiva con `when`
 - Transporte de datos en `Rechazado(motivo)`
 
 ---
 
-## 🔧 Consultas Funcionales
+## 🔧 Consultas funcionales
 
 ### `ProductoQueries.kt`
 
-| Funci ón | Descripci ón | Operador |
+| Función | Descripción | Operador |
 |----------|-------------|----------|
 | `productosDisponibles()` | Filtra productos con stock > 0 | `filter` |
 | `nombresDeProductos()` | Extrae nombres de productos | `map` |
@@ -137,6 +144,7 @@ sealed class EstadoPedido {
 | `productosConStockBajo()` | Filtra productos con stock entre 1 y límite | `filter` |
 
 **Ejemplo de uso:**
+
 ```kotlin
 val disponibles = productosDisponibles(productos)
 val nombres = nombresDeProductos(productos)
@@ -146,7 +154,7 @@ val total = valorTotalInventario(productos)
 
 ---
 
-## ⚡ Asincron ía con Corrutinas y Flow
+## ⚡ Async con corrutinas y Flow
 
 ### `ProductoRepository` 🗄️
 
@@ -160,12 +168,10 @@ interface ProductoRepository {
 }
 ```
 
-**Implementaci ón `ProductoRepositoryFake`:**
+**Implementación `ProductoRepositoryFake`:**
 - Simula latencia de red con `delay(1000)`
 - Manejo de errores con `Result`
-- L ógica para aumentar o disminuir stock
-
----
+- Lógica para aumentar o disminuir stock
 
 ### `ObservarProductosUseCase` 🔄
 
@@ -178,6 +184,7 @@ class ObservarProductosUseCase(
 ```
 
 **Estados de `ResultadoProductos`:**
+
 ```kotlin
 sealed class ResultadoProductos {
     data object cargando : ResultadoProductos()
@@ -186,7 +193,7 @@ sealed class ResultadoProductos {
 }
 ```
 
-**Flujo de emisi ón:**
+**Flujo de emisión:**
 1. `cargando` → Muestra indicador de carga
 2. `Exito` → Emite lista de productos
 3. `Error` → Maneja excepciones
@@ -215,48 +222,96 @@ class SharedLogicAndroidHostTest {
 
 ---
 
-## 🎯 Caracter ísticas Implementadas
+## 🎯 Características implementadas
 
 ### Null-Safety ✅
 - Uso de tipos `String?` para datos opcionales
 - Operador Elvis `?:` para valores por defecto
-- Evita operador `!!` (aserci ón forzada)
+- Evita operador `!!` (aserción forzada)
 
 ### Inmutabilidad ✅
 - Propiedades declaradas con `val`
-- Data classes con m étodo `copy()`
+- Data classes con método `copy()`
 - Listas inmutables con `toList()`
 
 ### Data Classes ✅
-- Generaci ón autom ática de `equals`, `hashCode`, `toString`
+- Generación automática de `equals`, `hashCode`, `toString`
 - Pattern matching con `when`
-- Desestructuraci ón de objetos
+- Desestructuración de objetos
 
 ### Sealed Classes ✅
 - Estados restringidos a conjunto conocido
-- Evaluaci ón exhaustiva en compilaci ón
+- Evaluación exhaustiva en compilación
 - Transporte de datos en subtipos
 
 ### Corrutinas ✅
-- Funciones `suspend` para operaciones as íncronas
-- `delay()` para simulaci ón de latencia
+- Funciones `suspend` para operaciones asíncronas
+- `delay()` para simulación de latencia
 - No bloqueo del hilo principal
 
 ### Flow ✅
-- Emisi ón m últiple de valores en el tiempo
+- Emisión múltiple de valores en el tiempo
 - Manejo reactivo de estados
-- Integraci ón con ViewModel (StateFlow)
+- Integración con ViewModel (StateFlow)
 
 ---
 
-## 🛠️ Stack Tecnol ógico
+## 🛠️ Stack tecnológico
 
-| Tecnolog ía | Prop ósito |
-|------------|------------|
-| Kotlin Multiplatform | Compartici ón de c ódigo Android/iOS |
-| Corrutinas | Asincron ía no bloqueante |
-| Flow | Programaci ón reactiva |
-| Clean Architecture | Separaci ón de capas |
+| Tecnología | Propósito |
+|------------|-----------|
+| Kotlin Multiplatform | Compartición de código Android/iOS |
+| Corrutinas | Asincronía no bloqueante |
+| Flow | Programación reactiva |
+| Clean Architecture | Separación de capas |
+| Compose Multiplatform | UI compartida |
+
+---
+
+## 🚀 Ejecución
+
+### Requisitos
+- Android Studio Koala o superior
+- JDK 17
+- Android SDK
+- Gradle 8.0+
+
+### Comandos
+
+```bash
+# Sincronizar proyecto
+./gradlew :shared:sync
+
+# Ejecutar tests
+./gradlew :shared:allTests
+
+# Build del proyecto
+./gradlew build
+```
+
+---
+
+## 📝 Buenas prácticas aplicadas
+
+1. Código 100% `commonMain` - sin dependencias de Android/iOS
+2. Commits atómicos - cada cambio en un commit separado
+3. Validaciones en `init` - reglas de negocio en el constructor
+4. Propiedades derivadas - cálculos como funciones, no como `var`
+5. Manejo seguro de nulos - sin `!!`, con `?:` y `?.`
+
+---
+
+## 👨‍💻 Autor
+
+**Andrey Mestanza**  
+Sistemas Engineering Student - UPeU  
+[GitHub](https://github.com/17Yerdna)
+
+---
+
+## 📄 Licencia
+
+Proyecto académico para la asignatura de Desarrollo de Aplicaciones Móviles.
 
 ---
 
@@ -319,9 +374,9 @@ shared/src/commonMain/kotlin/pe/edu/upeu/pharmamobil/
 
 ## 👨‍💻 Autor
 
-**Fabian Rodriguez**  
+**Andrey Mestanza**  
 Sistemas Engineering Student - UPeU  
-[GitHub](https://github.com/fabianrodriguez33)
+[GitHub](https://github.com/17Yerdna)
 
 ---
 
