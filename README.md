@@ -1,31 +1,56 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# PharmaMobil 📱💊
 
-* [/iosApp](./iosApp/iosApp) contains an iOS application. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+Aplicativa móvil multiplataforma para gestión de farmacias, desarrollada con **Kotlin Multiplatform (KMP)**.
 
-* [/shared](./shared/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./shared/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./shared/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./shared/src/jvmMain/kotlin)
-    folder is the appropriate location.
+## 🎓 Contexto Acad émico
 
-### Running the apps
+- **Universidad:** Universidad Peruana de Ciencias Aplicadas (UPeU)
+- **Ciclo:** VIII Ciclo - 2026-2
+- **Asignatura:** Desarrollo de Aplicaciones Móviles
+- **Estudiante:** Fabian Rodriguez
 
-Use the run configurations provided by the run widget in your IDE's toolbar. You can also use these commands and options:
+## 🏗️ Arquitectura del Proyecto
 
-- Android app: `./gradlew :androidApp:assembleDebug`
-- iOS app: open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+```
+PharmaMobil/
+├── shared/
+│   └── src/commonMain/kotlin/pe/edu/upeu/pharmamobil/
+│       ├── domain/
+│       │   ├── model/
+│       │   └── usecase/
+│       └── data/
+│           └── repository/
+├── androidApp/
+└── iosApp/
+```
 
-### Running tests
+## 📦 Entidades de Dominio
 
-Use the run button in your IDE's editor gutter, or run tests using Gradle tasks:
+### Cliente, Producto, Pedido, DetallePedido, EstadoPedido
 
-- Android tests: `./gradlew :shared:testAndroidHostTest`
-- iOS tests: `./gradlew :shared:iosSimulatorArm64Test`
+- **Null-safety:** Tipos `String?` y operador Elvis `?:`
+- **Inmutabilidad:** Propiedades con `val`
+- **Data classes:** `equals`, `hashCode`, `toString` autom áticos
+- **Sealed class:** Estados `Pendiente`, `Procesando`, `Entregado`, `Rechazado`
 
----
+## 🔧 Consultas Funcionales
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+- `productosDisponibles()` - `filter`
+- `nombresDeProductos()` - `map`
+- `buscarProductoPorId()` - `find`
+- `valorTotalInventario()` - `sumOf`
+
+## ⚡ Asincron ía
+
+- **Corrutinas:** Funciones `suspend` con `delay`
+- **Flow:** Emisi ón de estados `Cargando`, `Exitoso`, `Error`
+
+## 🛠️ Stack
+
+- Kotlin Multiplatform
+- Corrutinas + Flow
+- Clean Architecture
+
+## 👨‍💻 Autor
+
+Fabian Rodriguez - UPeU 2026-2
