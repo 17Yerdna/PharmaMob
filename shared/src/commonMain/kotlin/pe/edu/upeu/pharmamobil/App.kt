@@ -9,6 +9,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import androidx.compose.ui.tooling.preview.Preview
 import pe.edu.upeu.pharmamobil.navigation.Screen
 import pe.edu.upeu.pharmamobil.navigation.tituloPantalla
 import pe.edu.upeu.pharmamobil.presentation.cliente.ClienteScreen
@@ -19,6 +20,7 @@ import pe.edu.upeu.pharmamobil.presentation.theme.AppIcons
 import pe.edu.upeu.pharmamobil.presentation.theme.PharmaMobilTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Preview
 @Composable
 fun App() {
     // Estado del tema (Light / Dark)
