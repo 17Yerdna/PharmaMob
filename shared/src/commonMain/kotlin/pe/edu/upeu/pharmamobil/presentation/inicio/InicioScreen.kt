@@ -1,5 +1,6 @@
 package pe.edu.upeu.pharmamobil.presentation.inicio
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +13,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.resources.painterResource
+import pharmamobil.shared.generated.resources.Res
+import pharmamobil.shared.generated.resources.pharmamobil_logo
 import pe.edu.upeu.pharmamobil.presentation.theme.AppIcons
 
 @Composable
@@ -30,7 +34,7 @@ fun InicioScreen(
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Banner de Bienvenida
+        // Pasos 12 y 13: Banner de Bienvenida con Consumo de Recurso Compartido (Logo)
         Card(
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(
@@ -44,27 +48,33 @@ fun InicioScreen(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = AppIcons.Home,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.size(32.dp)
+                    Image(
+                        painter = painterResource(Res.drawable.pharmamobil_logo),
+                        contentDescription = "Logo PharmaMobil",
+                        modifier = Modifier.size(48.dp)
                     )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = "Panel General",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Column {
+                        Text(
+                            text = "PharmaMobil",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                        Text(
+                            text = "Sistema de Gestión Farmacéutica",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
+                        )
+                    }
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Bienvenido a PharmaMobil. Gestiona tu inventario de medicamentos, clientes y órdenes de despacho desde un único sistema centralizado.",
+                    text = "Bienvenido a PharmaMobil. Gestiona tu inventario con clasificación por pestañas (Tabs), clientes y órdenes de despacho desde un único sistema centralizado.",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.9f),
                     lineHeight = 20.sp
                 )
             }
@@ -89,15 +99,15 @@ fun InicioScreen(
         ) {
             MetricaCard(
                 titulo = "Productos",
-                valor = "128",
-                subtitulo = "En catálogo",
+                valor = "5",
+                subtitulo = "En catálogo (3 activos)",
                 icono = AppIcons.ShoppingCart,
                 modifier = Modifier.weight(1f),
                 onClick = onNavigateToProductos
             )
             MetricaCard(
                 titulo = "Clientes",
-                valor = "45",
+                valor = "4",
                 subtitulo = "Registrados",
                 icono = AppIcons.Person,
                 modifier = Modifier.weight(1f),
@@ -113,7 +123,7 @@ fun InicioScreen(
         ) {
             MetricaCard(
                 titulo = "Pedidos",
-                valor = "18",
+                valor = "4",
                 subtitulo = "Por despachar",
                 icono = AppIcons.List,
                 modifier = Modifier.weight(1f),
@@ -121,8 +131,8 @@ fun InicioScreen(
             )
             MetricaCard(
                 titulo = "Stock Crítico",
-                valor = "3",
-                subtitulo = "Menor a 10 u.",
+                valor = "2",
+                subtitulo = "Amoxicilina / Diclof.",
                 icono = AppIcons.Warning,
                 modifier = Modifier.weight(1f),
                 onClick = onNavigateToProductos
@@ -131,7 +141,7 @@ fun InicioScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Tarjeta Informativa de Sesión 4
+        // Tarjeta Informativa de Pestañas y Theming
         Card(
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
@@ -152,13 +162,13 @@ fun InicioScreen(
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
                     Text(
-                        text = "Navegación Fluida Activa",
+                        text = "Gestión de Inventario por Tabs",
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "Usa el menú lateral (Navigation Drawer) para alternar entre Inicio, Productos, Clientes y Pedidos.",
+                        text = "En la sección de Productos clasifica los ítems por Activos, Inactivos y Bajo Stock (<= 5 unidades).",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
                     )

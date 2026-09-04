@@ -1,10 +1,11 @@
 package pe.edu.upeu.pharmamobil.domain.model
 
 data class Producto(
-    val id: Long,
+    val id: Long = 0L,
     val nombre: String,
     val precio: Double,
-    val stock: Int
+    val stock: Int,
+    val activo: Boolean = true
 ){
     init {
         require(value = nombre.isNotBlank()){
